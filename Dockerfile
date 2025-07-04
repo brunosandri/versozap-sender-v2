@@ -1,20 +1,20 @@
-# Imagem oficial com Puppeteer + Chrome
 FROM ghcr.io/puppeteer/puppeteer:latest
 
-# Define o diretório de trabalho dentro do container
 WORKDIR /app
 
-# Copia todos os arquivos do projeto para dentro do container
-COPY . .
+# Copia apenas package.json e lock como root
+COPY package*.json ./
 
-# Muda o usuário padrão de execução para o seguro
-USER pptruser
-
-# Instala as dependências
+# Instala dependências como root
 RUN npm install
 
-# Expõe a porta 3000 para que o Railway possa acessar
+# Copia o restante dos arquivos
+COPY . .
+
+# Usa o usuário seguro do Puppeteer
+USER pptruser
+
 EXPOSE 3000
 
-# Comando padrão para iniciar a aplicação
 CMD ["node", "index.js"]
+
