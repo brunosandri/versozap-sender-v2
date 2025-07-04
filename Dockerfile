@@ -7,9 +7,6 @@ WORKDIR /app
 # Copia todos os arquivos do projeto para dentro do container
 COPY . .
 
-# Corrige permissões para o usuário que o Puppeteer usa
-RUN chown -R pptruser:pptruser /app
-
 # Muda o usuário padrão de execução para o seguro
 USER pptruser
 
