@@ -1,17 +1,23 @@
-# Imagem base com Chrome e Node
+# Imagem oficial com Puppeteer + Chrome
 FROM ghcr.io/puppeteer/puppeteer:latest
 
-# Diretório de trabalho
+# Define o diretório de trabalho dentro do container
 WORKDIR /app
 
-# Copia os arquivos do projeto
+# Copia todos os arquivos do projeto para dentro do container
 COPY . .
+
+# Corrige permissões para o usuário que o Puppeteer usa
+RUN chown -R pptruser:pptruser /app
+
+# Muda o usuário padrão de execução para o seguro
+USER pptruser
 
 # Instala as dependências
 RUN npm install
 
-# Porta que será exposta
+# Expõe a porta 3000 para que o Railway possa acessar
 EXPOSE 3000
 
-# Comando para iniciar
+# Comando padrão para iniciar a aplicação
 CMD ["node", "index.js"]
