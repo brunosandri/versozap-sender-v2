@@ -1,9 +1,9 @@
-# Usa Node oficial com Chromium via apt
-FROM node:18-slim
+# Usa uma imagem base leve com Node 20
+FROM node:20-slim
 
-# Instala dependências do Chromium
+# Instala Chromium e dependências para o Puppeteer funcionar
 RUN apt-get update && apt-get install -y \
-    wget \
+    chromium \
     ca-certificates \
     fonts-liberation \
     libappindicator3-1 \
@@ -21,25 +21,22 @@ RUN apt-get update && apt-get install -y \
     libxrandr2 \
     xdg-utils \
     libgbm-dev \
-    chromium \
  && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Cria diretório da aplicação
+# Define diretório da aplicação
 WORKDIR /app
 
-# Copia arquivos de dependências
+# Copia apenas os arquivos de dependência e instala
 COPY package*.json ./
-
-# Instala dependências Node
 RUN npm install
 
-# Copia o restante da aplicação
+# Copia o restante do código
 COPY . .
 
-# Expõe a porta usada pelo servidor
+# Expõe a porta da aplicação
 EXPOSE 3000
 
-# Comando para iniciar
+# Inicia o app
 CMD ["node", "index.js"]
 
 
