@@ -28,6 +28,8 @@ venom
     console.error('Erro ao conectar com o WhatsApp:', error);
   });
 
+  
+
 app.get('/', (req, res) => {
   res.send('VersoZap Sender está rodando!');
 });
@@ -48,6 +50,20 @@ app.post('/enviar', async (req, res) => {
 });
 
 const port = process.env.PORT || 3000;
+
+app.get('/qrcode', async (req, res) => {
+  if (!client) {
+    return res.status(500).json({ erro: 'Cliente WhatsApp não iniciado ainda' });
+  }
+
+  const base64 = await client.getQrCode(); // retorna base64 do QR Code
+  if (!base64) {
+    return res.status(500).json({ erro: 'QR Code não disponível' });
+  }
+
+  return res.json({ qrCode: base64 });
+});
+
 app.listen(port, () => {
   console.log(`🚀 Servidor rodando em http://localhost:${port}`);
 });
